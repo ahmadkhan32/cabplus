@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CABPLUS AI Compliance — GDPR, ISO 27001 &amp; Cyber Essentials readiness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-900:#0F1B2E;
+    --ink-800:#16273F;
+    --ink-700:#1E3352;
+    --ink-line: rgba(237,233,222,0.14);
+    --paper:#EDE9DE;
+    --paper-line: rgba(35,36,31,0.14);
+    --paper-text:#23241F;
+    --paper-muted:#6B6656;
+    --teal:#3E7C6C;
+    --teal-deep:#2B5A4D;
+    --amber:#C2793A;
+    --cream:#F4F2EA;
+    --cream-muted: rgba(244,242,234,0.68);
+    --radius-doc: 3px;
+    --radius-pill: 999px;
+    --max: 1120px;
+  }
+  :root:not([data-theme="light"]){
+    /* dark scheme = brand default, deepen slightly */
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink-900:#0B1524;
+      --ink-800:#122036;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink-900:#0B1524;
+    --ink-800:#122036;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink-900);
+    color:var(--cream);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.01em;
+  }
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 28px;
+  }
+  section{position:relative;}
+
+  /* ---------- focus & motion ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:rgba(15,27,46,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--ink-line);
+  }
+  .navbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:var(--max);
+    margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .brand-mark{
+    font-family:'Fraunces', serif;
+    font-size:1.28rem;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .brand-sub{
+    font-size:0.72rem;
+    color:var(--cream-muted);
+    font-family:'IBM Plex Mono', monospace;
+  }
+  nav.links{
+    display:flex; gap:30px;
+    font-size:0.93rem;
+  }
+  nav.links a{
+    text-decoration:none;
+    color:var(--cream-muted);
+    transition:color .15s ease;
+  }
+  nav.links a:hover{color:var(--cream);}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 20px;
+    border-radius:var(--radius-pill);
+    font-size:0.9rem;
+    font-weight:500;
+    text-decoration:none;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+  .btn-primary{
+    background:var(--teal);
+    color:#F4F2EA;
+  }
+  .btn-primary:hover{background:var(--teal-deep);}
+  .btn-ghost{
+    border-color:rgba(244,242,234,0.3);
+    color:var(--cream);
+  }
+  .btn-ghost:hover{border-color:var(--cream);}
+  .menu-toggle{display:none; background:none; border:none; color:var(--cream); font-size:1.5rem;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:88px 0 76px;
+    border-bottom:1px solid var(--ink-line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:64px;
+    align-items:center;
+  }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--teal);
+    background:rgba(62,124,108,0.14);
+    border:1px solid rgba(62,124,108,0.4);
+    padding:5px 12px;
+    border-radius:var(--radius-pill);
+    display:inline-block;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 4vw, 3.35rem);
+    line-height:1.08;
+    max-width:12ch;
+  }
+  .hero p.lead{
+    margin-top:22px;
+    max-width:46ch;
+    font-size:1.08rem;
+    color:var(--cream-muted);
+  }
+  .hero-ctas{
+    margin-top:34px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .hero-note{
+    margin-top:22px;
+    font-size:0.82rem;
+    color:rgba(244,242,234,0.5);
+  }
+
+  /* ledger card in hero */
+  .ledger{
+    background:var(--paper);
+    color:var(--paper-text);
+    border-radius:var(--radius-doc);
+    padding:26px 26px 22px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+    transform:rotate(0.6deg);
+  }
+  .ledger-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:1px solid var(--paper-line);
+    padding-bottom:14px; margin-bottom:14px;
+  }
+  .ledger-title{font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600;}
+  .ledger-ref{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--paper-muted);}
+  .ledger-status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    color:var(--teal-deep);
+    border:1px solid var(--teal-deep);
+    padding:3px 9px;
+    border-radius:var(--radius-pill);
+    white-space:nowrap;
+  }
+  .ledger-row{
+    display:flex; align-items:center; gap:12px;
+    padding:11px 0;
+    border-bottom:1px solid var(--paper-line);
+    opacity:0;
+    animation:rowIn .5s ease forwards;
+  }
+  .ledger-row:last-child{border-bottom:none;}
+  .ledger-row:nth-child(2){animation-delay:.15s;}
+  .ledger-row:nth-child(3){animation-delay:.5s;}
+  .ledger-row:nth-child(4){animation-delay:.85s;}
+  .ledger-row:nth-child(5){animation-delay:1.2s;}
+  .ledger-row:nth-child(6){animation-delay:1.55s;}
+  @keyframes rowIn{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  .check{
+    width:18px; height:18px; border-radius:5px;
+    border:1.4px solid var(--paper-muted);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .check.done{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .check.pending{ border-style:dashed; }
+  .check svg{width:11px; height:11px;}
+  .ledger-label{flex:1; font-size:0.88rem;}
+  .ledger-tag{font-family:'IBM Plex Mono', monospace; font-size:0.68rem; color:var(--paper-muted);}
+
+  /* ---------- trust bar ---------- */
+  .trust{
+    padding:30px 0;
+    border-bottom:1px solid var(--ink-line);
+  }
+  .trust .wrap{
+    display:flex; align-items:center; gap:34px; flex-wrap:wrap;
+    justify-content:space-between;
+  }
+  .trust-label{
+    font-size:0.8rem; color:var(--cream-muted); flex-shrink:0;
+  }
+  .trust-items{display:flex; gap:30px; flex-wrap:wrap;}
+  .trust-item{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    color:rgba(244,242,234,0.75);
+  }
+
+  /* ---------- section heading pattern ---------- */
+  .section-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:28px;
+    align-items:end;
+    margin-bottom:44px;
+  }
+  .section-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--teal);
+    padding-bottom:6px;
+  }
+  .section-head h2{
+    font-size:clamp(1.6rem, 2.6vw, 2.1rem);
+  }
+  .section-head p{
+    color:var(--cream-muted);
+    max-width:56ch;
+    margin-top:10px;
+    font-size:0.98rem;
+  }
+
+  /* ---------- services register (table) ---------- */
+  .services{padding:96px 0; border-bottom:1px solid var(--ink-line);}
+  .register{
+    border-top:1px solid var(--ink-line);
+  }
+  .reg-row{
+    display:grid;
+    grid-template-columns:64px 1fr 1.4fr;
+    gap:24px;
+    padding:22px 0;
+    border-bottom:1px solid var(--ink-line);
+    align-items:baseline;
+  }
+  .reg-row:hover{background:rgba(244,242,234,0.02);}
+  .reg-num{font-family:'IBM Plex Mono', monospace; color:var(--teal); font-size:0.85rem;}
+  .reg-name{font-family:'Fraunces', serif; font-size:1.12rem; font-weight:500;}
+  .reg-desc{color:var(--cream-muted); font-size:0.93rem;}
+
+  /* ---------- process ---------- */
+  .process{padding:96px 0; border-bottom:1px solid var(--ink-line); background:var(--ink-800);}
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    border-top:1px solid var(--ink-line);
+    border-left:1px solid var(--ink-line);
+  }
+  .step{
+    padding:26px 22px;
+    border-right:1px solid var(--ink-line);
+    border-bottom:1px solid var(--ink-line);
+  }
+  .step-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--amber);
+  }
+  .step h3{
+    font-size:1.05rem;
+    margin-top:12px;
+    font-weight:500;
+  }
+  .step p{
+    margin-top:8px;
+    font-size:0.87rem;
+    color:var(--cream-muted);
+  }
+
+  /* ---------- housing spotlight ---------- */
+  .housing{padding:96px 0; border-bottom:1px solid var(--ink-line);}
+  .housing-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .housing-list{margin-top:26px; display:flex; flex-direction:column; gap:16px;}
+  .housing-item{display:flex; gap:14px; align-items:flex-start;}
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--amber);
+    margin-top:8px; flex-shrink:0;
+  }
+  .housing-item p{margin:0; font-size:0.95rem; color:var(--cream-muted);}
+  .housing-item strong{color:var(--cream); font-weight:500;}
+
+  .file-illustration{
+    background:var(--ink-700);
+    border:1px solid var(--ink-line);
+    border-radius:var(--radius-doc);
+    padding:26px;
+  }
+  .file-row{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 14px;
+    background:var(--paper);
+    color:var(--paper-text);
+    border-radius:2px;
+    margin-bottom:8px;
+    font-size:0.84rem;
+  }
+  .file-row.flag{
+    background:rgba(194,121,58,0.16);
+    color:#F4E3D0;
+    border:1px dashed var(--amber);
+  }
+  .file-row:last-child{margin-bottom:0;}
+  .file-icon{width:16px; height:16px; flex-shrink:0;}
+
+  /* ---------- pricing ---------- */
+  .pricing{padding:96px 0; border-bottom:1px solid var(--ink-line); background:var(--ink-800);}
+  .plans{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  .plan{
+    background:var(--paper);
+    color:var(--paper-text);
+    border-radius:var(--radius-doc);
+    padding:30px 26px;
+    display:flex; flex-direction:column;
+  }
+  .plan-name{font-family:'Fraunces', serif; font-size:1.2rem; font-weight:600;}
+  .plan-desc{font-size:0.86rem; color:var(--paper-muted); margin-top:8px; min-height:42px;}
+  .plan-price{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1.5rem;
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--paper-line);
+  }
+  .plan ul{
+    list-style:none; padding:0; margin:20px 0 0;
+    display:flex; flex-direction:column; gap:10px;
+    flex:1;
+  }
+  .plan li{
+    font-size:0.86rem;
+    padding-left:18px;
+    position:relative;
+    color:#3D3B32;
+  }
+  .plan li::before{
+    content:"";
+    position:absolute; left:0; top:7px;
+    width:7px; height:7px;
+    background:var(--teal);
+  }
+  .plan .btn{margin-top:22px; justify-content:center;}
+  .plan.featured{outline:2px solid var(--amber); outline-offset:-2px;}
+
+  /* ---------- about ---------- */
+  .about{padding:96px 0; border-bottom:1px solid var(--ink-line);}
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+  .about p{color:var(--cream-muted); font-size:1rem; max-width:52ch;}
+  .about p + p{margin-top:16px;}
+  .about-stats{display:flex; flex-direction:column; gap:26px;}
+  .stat{border-top:1px solid var(--ink-line); padding-top:14px;}
+  .stat-num{font-family:'Fraunces', serif; font-size:2rem;}
+  .stat-label{font-size:0.85rem; color:var(--cream-muted); margin-top:4px;}
+
+  /* ---------- final CTA ---------- */
+  .cta-final{padding:100px 0; text-align:center;}
+  .cta-final h2{font-size:clamp(1.8rem,3.4vw,2.6rem); max-width:22ch; margin:0 auto;}
+  .cta-final p{color:var(--cream-muted); margin:18px auto 30px; max-width:44ch;}
+  .cta-final .hero-ctas{justify-content:center;}
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--ink-line);
+    padding:40px 0 50px;
+  }
+  .foot-grid{
+    display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap;
+  }
+  .foot-brand{max-width:36ch; font-size:0.85rem; color:var(--cream-muted);}
+  .foot-links{display:flex; gap:26px; font-size:0.85rem;}
+  .foot-links a{text-decoration:none; color:var(--cream-muted);}
+  .foot-links a:hover{color:var(--cream);}
+  .disclaimer{
+    margin-top:30px; padding-top:24px; border-top:1px solid var(--ink-line);
+    font-size:0.78rem; color:rgba(244,242,234,0.45); max-width:80ch;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    .hero-grid, .housing-grid, .about-grid{grid-template-columns:1fr;}
+    .ledger{transform:none;}
+    .steps{grid-template-columns:1fr 1fr;}
+    .plans{grid-template-columns:1fr;}
+    .reg-row{grid-template-columns:40px 1fr; grid-template-areas:"n name" ". desc";}
+    .reg-num{grid-area:n;} .reg-name{grid-area:name;} .reg-desc{grid-area:desc;}
+  }
+  @media (max-width:520px){
+    .steps{grid-template-columns:1fr;}
+    .hero{padding:60px 0 50px;}
+    .section-head{grid-template-columns:1fr; gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="brand">
+      <span class="brand-mark">CABPLUS</span>
+      <span class="brand-sub">AI COMPLIANCE</span>
+    </div>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#housing">Housing</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+    </nav>
+    <a href="#contact" class="btn btn-primary">Book a review</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="kicker mono">GDPR · ISO 27001 · Cyber Essentials</span>
+      <h1>Compliance, documented and kept ready for audit</h1>
+      <p class="lead">We build and maintain the policies, records and risk assessments that GDPR, ISO 27001 and Cyber Essentials require — so your business stays audit-ready instead of scrambling before one.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Book a compliance review</a>
+        <a href="#services" class="btn btn-ghost">See what we cover</a>
+      </div>
+      <p class="hero-note">Independent consultancy. Final certification is issued by accredited certification bodies — we prepare you to pass their audit.</p>
+    </div>
+
+    <div class="ledger" aria-hidden="true">
+      <div class="ledger-head">
+        <div>
+          <div class="ledger-title">Compliance Register</div>
+          <div class="ledger-ref mono">REF 2026-014 · Reviewed weekly</div>
+        </div>
+        <span class="ledger-status">3 of 6 open</span>
+      </div>
+      <div class="ledger-row">
+        <div class="check done"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="1.6"/></svg></div>
+        <div class="ledger-label">GDPR privacy policy</div>
+        <div class="ledger-tag">DRAFTED</div>
+      </div>
+      <div class="ledger-row">
+        <div class="check done"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="1.6"/></svg></div>
+        <div class="ledger-label">Staff access records</div>
+        <div class="ledger-tag">CURRENT</div>
+      </div>
+      <div class="ledger-row">
+        <div class="check pending"></div>
+        <div class="ledger-label">Risk register — Q3</div>
+        <div class="ledger-tag">IN REVIEW</div>
+      </div>
+      <div class="ledger-row">
+        <div class="check pending"></div>
+        <div class="ledger-label">Cyber Essentials self-assessment</div>
+        <div class="ledger-tag">DUE 12 OCT</div>
+      </div>
+      <div class="ledger-row">
+        <div class="check done"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="currentColor" stroke-width="1.6"/></svg></div>
+        <div class="ledger-label">Tenant file audit — Block C</div>
+        <div class="ledger-tag">COMPLETE</div>
+      </div>
+      <div class="ledger-row">
+        <div class="check pending"></div>
+        <div class="ledger-label">ISO 27001 gap assessment</div>
+        <div class="ledger-tag">SCHEDULED</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <span class="trust-label">We prepare businesses for standards issued by:</span>
+    <div class="trust-items">
+      <span class="trust-item">UK GDPR / ICO</span>
+      <span class="trust-item">ISO/IEC 27001</span>
+      <span class="trust-item">NCSC Cyber Essentials</span>
+      <span class="trust-item">Local Housing Authorities</span>
+    </div>
+  </div>
+</div>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">01</span>
+      <div>
+        <h2>What we take off your plate</h2>
+        <p>Eight areas of compliance and back-office support, delivered as ongoing work rather than a one-off document drop.</p>
+      </div>
+    </div>
+
+    <div class="register">
+      <div class="reg-row">
+        <span class="reg-num mono">01</span>
+        <span class="reg-name">GDPR documentation</span>
+        <span class="reg-desc">Privacy policies, data processing records and subject access request procedures, written for how your business actually handles data.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">02</span>
+        <span class="reg-name">Staff compliance records</span>
+        <span class="reg-desc">A single system tracking training, right-to-work checks, DBS renewals and policy sign-offs, with reminders before anything lapses.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">03</span>
+        <span class="reg-name">Risk assessments &amp; audit checklists</span>
+        <span class="reg-desc">Structured risk registers and checklists you can hand to an inspector or auditor without last-minute rewriting.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">04</span>
+        <span class="reg-name">Cyber Essentials preparation</span>
+        <span class="reg-desc">We close the gaps in your device, access and patching controls before you submit the self-assessment.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">05</span>
+        <span class="reg-name">ISO 27001 readiness</span>
+        <span class="reg-desc">Policies, controls and evidence mapped to Annex A, built to pass a stage 1 audit with an accredited certification body.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">06</span>
+        <span class="reg-name">Tenant-file compliance audits</span>
+        <span class="reg-desc">For HMOs and supported housing: gas safety, EICR, fire risk and tenancy paperwork checked and flagged before an inspection does it for you.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">07</span>
+        <span class="reg-name">AI-assisted document management</span>
+        <span class="reg-desc">Your policies, evidence and renewal dates organised in one place, with automatic prompts when something needs updating.</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-num mono">08</span>
+        <span class="reg-name">Business set-up support</span>
+        <span class="reg-desc">Company registration, a working website and a basic social presence for businesses building their compliance function from scratch.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">02</span>
+      <div>
+        <h2>How an engagement runs</h2>
+        <p>Four stages, from first assessment to the point an accredited auditor signs off.</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num mono">STAGE 1</span>
+        <h3>Assessment</h3>
+        <p>We review what you already have against the standard you're working toward, and list the gaps.</p>
+      </div>
+      <div class="step">
+        <span class="step-num mono">STAGE 2</span>
+        <h3>Documentation</h3>
+        <p>Policies, registers and records get written or rebuilt to match how your business actually operates.</p>
+      </div>
+      <div class="step">
+        <span class="step-num mono">STAGE 3</span>
+        <h3>Implementation</h3>
+        <p>Controls go live, staff are briefed, and the compliance record starts tracking evidence as it's created.</p>
+      </div>
+      <div class="step">
+        <span class="step-num mono">STAGE 4</span>
+        <h3>Audit handoff</h3>
+        <p>We hand a complete, evidenced file to your accredited certification body or inspector.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="housing" id="housing">
+  <div class="wrap housing-grid">
+    <div>
+      <span class="kicker mono">HOUSING &amp; SUPPORTED LIVING</span>
+      <h2>Built for HMO and supported housing compliance</h2>
+      <div class="housing-list">
+        <div class="housing-item">
+          <span class="dot"></span>
+          <p><strong>Tenant files, checked automatically.</strong> Missing gas certificates, expired EICRs and incomplete tenancy agreements get flagged before an inspection finds them.</p>
+        </div>
+        <div class="housing-item">
+          <span class="dot"></span>
+          <p><strong>Support notes kept in order.</strong> For supported housing, care and support records are organised and dated the way funders and regulators expect to see them.</p>
+        </div>
+        <div class="housing-item">
+          <span class="dot"></span>
+          <p><strong>Audit reminders that fire in advance.</strong> Renewal dates are tracked so nothing lapses between one visit and the next.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="file-illustration">
+      <div class="file-row">
+        <svg class="file-icon" viewBox="0 0 16 16" fill="none"><path d="M3 1.5h7l3 3V14.5H3z" stroke="#3E7C6C" stroke-width="1.2"/><path d="M5.5 8h5M5.5 10.5h5" stroke="#3E7C6C" stroke-width="1.2"/></svg>
+        <span>Flat 4B — Gas Safety Certificate — valid to Mar 2027</span>
+      </div>
+      <div class="file-row">
+        <svg class="file-icon" viewBox="0 0 16 16" fill="none"><path d="M3 1.5h7l3 3V14.5H3z" stroke="#3E7C6C" stroke-width="1.2"/><path d="M5.5 8h5M5.5 10.5h5" stroke="#3E7C6C" stroke-width="1.2"/></svg>
+        <span>Flat 4B — Tenancy agreement — signed &amp; filed</span>
+      </div>
+      <div class="file-row flag">
+        <svg class="file-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1.5v7M8 11v1.5" stroke="#C2793A" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>Flat 2A — EICR expired 14 days ago — action needed</span>
+      </div>
+      <div class="file-row">
+        <svg class="file-icon" viewBox="0 0 16 16" fill="none"><path d="M3 1.5h7l3 3V14.5H3z" stroke="#3E7C6C" stroke-width="1.2"/><path d="M5.5 8h5M5.5 10.5h5" stroke="#3E7C6C" stroke-width="1.2"/></svg>
+        <span>Flat 5C — Fire risk assessment — reviewed Aug 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">03</span>
+      <div>
+        <h2>Packages</h2>
+        <p>Priced as a starting point — most clients settle into a monthly package after the first documentation pass.</p>
+      </div>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">Basic documentation</div>
+        <div class="plan-desc">A one-off set of core policies to get an existing business compliant.</div>
+        <div class="plan-price mono">£199–£399</div>
+        <ul>
+          <li>GDPR privacy policy &amp; data map</li>
+          <li>Core staff policies</li>
+          <li>Basic risk register</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Start here</a>
+      </div>
+      <div class="plan featured">
+        <div class="plan-name">Monthly compliance support</div>
+        <div class="plan-desc">Ongoing documentation, monitoring and audit-readiness for a business already trading.</div>
+        <div class="plan-price mono">£299–£799<span style="font-size:0.9rem;">/mo</span></div>
+        <ul>
+          <li>Everything in Basic</li>
+          <li>Staff record tracking &amp; reminders</li>
+          <li>Quarterly risk assessment review</li>
+          <li>Priority support before inspections</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Most common choice</a>
+      </div>
+      <div class="plan">
+        <div class="plan-name">ISO-readiness project</div>
+        <div class="plan-desc">A fixed-scope project to take you from where you are to stage 1 audit-ready.</div>
+        <div class="plan-price mono">£1,500–£5,000+</div>
+        <ul>
+          <li>Full gap assessment against Annex A</li>
+          <li>Complete policy &amp; evidence set</li>
+          <li>Staff briefing &amp; internal audit</li>
+          <li>Handoff to your certification body</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Discuss scope</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <span class="kicker mono">WHY CABPLUS</span>
+      <h2 style="font-size:clamp(1.6rem,2.6vw,2.1rem); margin-top:18px;">Compliance run like a housing team runs a property portfolio</h2>
+      <p>Most compliance work fails quietly — a policy gets written once and never updated, a certificate expires and nobody notices until an inspector does. We treat compliance the way a good housing administrator treats a block of flats: checked on a schedule, not a panic.</p>
+      <p>We're a small, independent consultancy — not a reseller of accredited certificates. Where a standard requires third-party sign-off, such as ISO 27001 or Cyber Essentials Plus, we prepare your evidence and hand you to an accredited body for the final audit.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat">
+        <div class="stat-num mono">8</div>
+        <div class="stat-label">compliance and support services covered under one engagement</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num mono">4</div>
+        <div class="stat-label">stages from first assessment to audit handoff</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num mono">62012 · 62020 · 70229 · 82990</div>
+        <div class="stat-label">SIC codes our engagements are typically registered under</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="contact">
+  <div class="wrap">
+    <h2>Get an honest read on where your compliance stands</h2>
+    <p>A 30-minute review covers what's already in place, what's missing, and roughly what it would take to close the gap.</p>
+    <div class="hero-ctas">
+      <a href="mailto:cp@cabplus.uk" class="btn btn-primary">Book a compliance review</a>
+      <a href="#services" class="btn btn-ghost">Back to services</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand-mark" style="font-size:1.1rem;">CABPLUS</div>
+        <p style="margin-top:10px;">AI-assisted compliance and business support for small businesses, housing providers and supported living services in the UK.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#housing">Housing</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <p class="disclaimer">CABPLUS AI Compliance is an independent consultancy and is not an accredited certification body. We prepare policies, evidence and audit-readiness for standards including ISO/IEC 27001, Cyber Essentials and UK GDPR; formal certification against these standards is issued only by accredited third-party certification bodies. Pricing shown is indicative and confirmed after an initial review.</p>
+  </div>
+</footer>
+
+</body>
+</html>

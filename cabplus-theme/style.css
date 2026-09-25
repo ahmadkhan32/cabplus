@@ -1,4 +1,4 @@
-﻿/*
+/*
 Theme Name: CABPLUS AI Compliance
 Theme URI: https://cabplus.uk
 Author: CABPLUS
@@ -52,11 +52,6 @@ Tags: business, compliance, dark, gold, navy
 }
 .foot-brand-name {
   font-size: 1.35rem;
-}
-@media (max-width: 600px) {
-  .site-logo-img { width: 62px; height: 62px; }
-  .foot-logo-img { width: 56px; height: 56px; }
-  .logo-brand { font-size: 1.25rem; }
 }
 
 

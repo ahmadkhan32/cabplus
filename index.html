@@ -1777,115 +1777,373 @@
             max-width: 80ch;
         }
 
-        /* ====== RESPONSIVE ====== */
-        @media(max-width:1000px) {
-            .nav-links {
-                display: none;
-            }
+        /* ====== COMPREHENSIVE RESPONSIVE SYSTEM ====== */
 
-            .menu-toggle {
-                display: block;
-            }
+        /* Global overflow protection */
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+            position: relative;
+        }
+        img, svg, video {
+            max-width: 100%;
+            height: auto;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-            .contact-grid,
+        /* ── LAPTOP / DESKTOP (992px to 1199px) ── */
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .wrap {
+                padding: 0 24px;
+            }
+            .navbar {
+                padding: 12px 24px;
+                gap: 16px;
+            }
+            .nav-links, nav.links {
+                gap: 16px;
+            }
+            .nav-btn, nav.links .nav-list > li > a {
+                font-size: 0.88rem;
+            }
+            .hero-grid {
+                gap: 36px;
+            }
+            .svc-cards {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 18px;
+            }
             .service-content-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 300px;
+                gap: 36px;
+            }
+            .contact-grid {
+                grid-template-columns: 1.3fr 1fr;
+                gap: 36px;
+            }
+        }
+
+        /* ── TABLET (max-width: 991px) ── */
+        @media (max-width: 991px) {
+            .nav-links, nav.links {
+                display: none !important;
+            }
+            .menu-toggle {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                min-width: 44px;
+                min-height: 44px;
+                padding: 8px;
+                font-size: 1.6rem;
+            }
+            .navbar {
+                padding: 12px 22px;
+                gap: 14px;
+            }
+            .navbar .btn-gold,
+            .navbar .btn {
+                padding: 9px 18px;
+                font-size: 0.86rem;
+            }
+            .mobile-nav {
+                display: none;
+                flex-direction: column;
+                background: rgba(11, 21, 36, 0.98);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-top: 1px solid var(--ink-line);
+                padding: 14px 24px 22px;
+                max-height: calc(100vh - 72px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-nav.open {
+                display: flex !important;
+            }
+            .mobile-nav .mob-link,
+            .mobile-nav .mobile-nav-list li a {
+                padding: 12px 0;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
             }
 
+            /* Grid Stackings */
+            .hero-grid,
+            .housing-grid,
+            .about-grid,
+            .service-content-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+            .ledger {
+                transform: none;
+                width: 100%;
+                margin-top: 16px;
+            }
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
+            .plans {
+                grid-template-columns: 1fr;
+                max-width: 540px;
+                margin: 0 auto;
+                gap: 22px;
+            }
+            .svc-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
             .svc-divider {
                 display: none;
             }
-        }
-
-        @media(max-width:900px) {
-
-            .hero-grid,
-            .housing-grid,
-            .about-grid {
-                grid-template-columns: 1fr;
+            .service-sidebar {
+                position: static;
+                width: 100%;
             }
-
-            .ledger {
-                transform: none;
-            }
-
-            .steps {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .plans {
-                grid-template-columns: 1fr;
-            }
-
-            .reg-row {
-                grid-template-columns: 40px 1fr;
-                grid-template-areas: "n name" ". desc";
-            }
-
-            .reg-num {
-                grid-area: n;
-            }
-
-            .reg-name {
-                grid-area: name;
-            }
-
-            .reg-desc {
-                grid-area: desc;
-            }
-
-            .svc-cards {
-                grid-template-columns: 1fr 1fr;
-            }
-
             .service-hero-inner {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 22px;
             }
+            .service-hero-icon {
+                display: flex;
+                justify-content: center;
+            }
+            .breadcrumb {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .reg-row {
+                grid-template-columns: 44px 1fr;
+                grid-template-areas: "n name" ". desc";
+                gap: 8px;
+            }
+            .reg-num { grid-area: n; }
+            .reg-name { grid-area: name; }
+            .reg-desc { grid-area: desc; }
 
-            .form-row-2 {
-                grid-template-columns: 1fr;
+            /* Footer on Tablet */
+            .foot-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            .foot-brand {
+                max-width: 100%;
+                grid-column: span 2;
             }
         }
 
-        @media(max-width:600px) {
-            .steps {
-                grid-template-columns: 1fr;
+        /* ── TABLET ONLY (768px to 991px) ── */
+        @media (min-width: 768px) and (max-width: 991px) {
+            .wrap {
+                padding: 0 22px;
             }
-
             .hero {
-                padding: 60px 0 50px;
+                padding: 72px 0 60px;
             }
+        }
 
+        /* ── MOBILE (max-width: 767px) ── */
+        @media (max-width: 767px) {
+            .wrap {
+                padding: 0 16px;
+            }
+            .hero {
+                padding: 54px 0 44px;
+            }
+            .page-hero, .service-page-hero {
+                padding: 44px 0 36px;
+            }
+            h1 {
+                font-size: clamp(1.85rem, 6.5vw, 2.5rem);
+                line-height: 1.18;
+            }
+            h2 {
+                font-size: clamp(1.45rem, 5vw, 1.95rem);
+                line-height: 1.25;
+            }
             .section-head {
                 grid-template-columns: 1fr;
-                gap: 8px;
+                gap: 10px;
+                margin-bottom: 28px;
             }
-
-            .svc-icon-card {
-                min-width: 82px;
-                max-width: 96px;
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 14px;
             }
-
-            .svc-icon-circle {
-                width: 54px;
-                height: 54px;
-            }
-
             .svc-cards {
                 grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .about-values {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            /* Horizontal swipeable Services bar on mobile */
+            .services-bar {
+                padding: 24px 0 20px;
+            }
+            .services-bar-inner {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                gap: 10px;
+                justify-content: flex-start;
+                padding: 4px 16px 12px;
+                scrollbar-width: none;
+            }
+            .services-bar-inner::-webkit-scrollbar {
+                display: none;
+            }
+            .svc-icon-card {
+                flex-shrink: 0;
+                scroll-snap-align: start;
+                min-width: 86px;
+                max-width: 98px;
+                padding: 10px 6px;
+            }
+            .svc-icon-circle {
+                width: 52px;
+                height: 52px;
+            }
+            .svc-icon-label {
+                font-size: 0.65rem;
+            }
+
+            /* Forms */
+            .contact-form .form-row--2,
+            .form-row-2,
+            .contact-form .form-row {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .contact-form-wrap {
+                padding: 22px 18px;
+            }
+            .contact-form input,
+            .contact-form select,
+            .contact-form textarea {
+                font-size: 16px;
+            }
+
+            /* Footer on Mobile */
+            .foot-grid {
+                grid-template-columns: 1fr;
+                gap: 26px;
+            }
+            .foot-brand {
+                grid-column: span 1;
+            }
+
+            /* Floating WhatsApp on Mobile */
+            .whatsapp-float-tooltip {
+                display: none !important;
+            }
+        }
+
+        /* ── SMALL MOBILE (max-width: 480px) ── */
+        @media (max-width: 480px) {
+            .wrap {
+                padding: 0 14px;
+            }
+            .navbar {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .site-logo-img {
+                width: 46px !important;
+                height: 46px !important;
+                border-radius: 8px;
+                padding: 3px;
+            }
+            .logo-wrap {
+                gap: 8px;
+            }
+            .logo-brand {
+                font-size: 1.15rem !important;
+            }
+            .logo-sub {
+                font-size: 0.56rem !important;
+                letter-spacing: 0.08em;
+            }
+            .logo-tagline {
+                display: none !important;
+            }
+            .navbar > .btn-gold,
+            .navbar > .btn {
+                display: none;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            .hero-ctas .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-badges {
+                gap: 6px;
+            }
+            .hero-badge {
+                font-size: 0.72rem;
+                padding: 4px 9px;
             }
 
             .contact-form-wrap {
-                padding: 22px;
+                padding: 18px 14px;
+            }
+            .contact-form button[type="submit"] {
+                width: 100%;
             }
 
-            .navbar {
-                padding: 12px 18px;
+            .foot-logo-img {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            .foot-brand-name {
+                font-size: 1.15rem;
             }
 
+            .whatsapp-float {
+                width: 48px;
+                height: 48px;
+                bottom: 18px;
+                right: 18px;
+            }
+            .whatsapp-float svg {
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+        /* ── EXTRA SMALL MOBILE (max-width: 360px) ── */
+        @media (max-width: 360px) {
             .wrap {
-                padding: 0 16px;
+                padding: 0 10px;
+            }
+            .logo-brand {
+                font-size: 1.05rem !important;
+            }
+            .site-logo-img {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            .svc-card {
+                padding: 18px 14px;
             }
         }
     

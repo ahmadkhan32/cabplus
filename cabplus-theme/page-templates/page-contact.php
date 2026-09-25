@@ -1,29 +1,30 @@
-﻿<?php
+<?php
 /**
  * Template Name: Contact
- * CABPLUS — page-templates/page-contact.php
+ * CABPLUS - page-templates/page-contact.php
  */
 get_header();
 
 $submitted = false;
 $errors    = array();
 
+// PHP fallback form handler (used if plugin AJAX is not available)
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cabplus_contact_nonce']) ) {
-    if ( wp_verify_nonce( sanitize_text_field($_POST['cabplus_contact_nonce']), 'cabplus_contact_form' ) ) {
-        $name    = sanitize_text_field( $_POST['contact_name'] ?? '' );
-        $email   = sanitize_email( $_POST['contact_email'] ?? '' );
-        $phone   = sanitize_text_field( $_POST['contact_phone'] ?? '' );
-        $service = sanitize_text_field( $_POST['contact_service'] ?? '' );
-        $message = sanitize_textarea_field( $_POST['contact_message'] ?? '' );
+    if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cabplus_contact_nonce'] ) ), 'cabplus_contact_form' ) ) {
+        $name    = sanitize_text_field( wp_unslash( $_POST['contact_name']    ?? '' ) );
+        $email   = sanitize_email(      wp_unslash( $_POST['contact_email']   ?? '' ) );
+        $phone   = sanitize_text_field( wp_unslash( $_POST['contact_phone']   ?? '' ) );
+        $service = sanitize_text_field( wp_unslash( $_POST['contact_service'] ?? '' ) );
+        $message = sanitize_textarea_field( wp_unslash( $_POST['contact_message'] ?? '' ) );
 
-        if ( empty($name) )    $errors[] = 'Please enter your name.';
-        if ( !is_email($email) ) $errors[] = 'Please enter a valid email address.';
-        if ( empty($message) ) $errors[] = 'Please enter a message.';
+        if ( empty($name) )          $errors[] = 'Please enter your name.';
+        if ( ! is_email($email) )    $errors[] = 'Please enter a valid email address.';
+        if ( empty($message) )       $errors[] = 'Please enter a message.';
 
         if ( empty($errors) ) {
-            $to      = get_option('admin_email');
-            $subject = 'New enquiry from ' . $name . ' — CABPLUS';
-            $body    = "Name: $name\nEmail: $email\nPhone: $phone\nService of interest: $service\n\nMessage:\n$message";
+            $to      = apply_filters( 'cabplus_contact_email_to', 'cp@cabplus.uk' );
+            $subject = 'New enquiry from ' . $name . ' - CABPLUS';
+            $body    = "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\nService: {$service}\n\nMessage:\n{$message}";
             $headers = array( 'Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email );
             wp_mail( $to, $subject, $body, $headers );
             $submitted = true;
@@ -45,45 +46,71 @@ $services = cabplus_get_services();
 <section class="contact-section">
   <div class="wrap contact-grid">
 
-    <div class="contact-form-wrap">
-      <?php if ($submitted): ?>
-      <div class="form-success">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="var(--teal)" opacity="0.2"/><path d="M14 24l8 8 14-14" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <h3>Thank you, we'll be in touch!</h3>
-        <p>We've received your message and will respond within one business day.</p>
-      </div>
-      <?php else: ?>
-        <?php if (!empty($errors)): ?>
-        <div class="form-errors">
-          <?php foreach ($errors as $e): ?><p>&#9888; <?php echo esc_html($e); ?></p><?php endforeach; ?>
-        </div>
-        <?php endif; ?>
+    <!-- FORM COLUMN: AJAX wrapper (plugin) or PHP fallback -->
+    <div class="contact-form-wrap cabplus-ajax-form-wrap">
 
-      <form method="POST" class="contact-form" novalidate>
+      <!-- AJAX success (shown by JS after successful submission) -->
+      <div class="cabplus-form-success" style="display:none;">
+        <div class="form-success">
+          <div class="form-success-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M6 14l6 6 10-10" stroke="#3E7C6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Thank you, we will be in touch!</h3>
+          <p>We have received your message and will respond within one business day.</p>
+        </div>
+      </div>
+
+      <?php if ($submitted): ?>
+      <!-- PHP fallback success -->
+      <div class="form-success">
+        <div class="form-success-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M6 14l6 6 10-10" stroke="#3E7C6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Thank you, we will be in touch!</h3>
+        <p>We have received your message and will respond within one business day.</p>
+      </div>
+
+      <?php else: ?>
+
+      <?php if (!empty($errors)): ?>
+      <div class="cabplus-form-error form-errors">
+        <?php foreach ($errors as $err): ?><p>&#9888; <?php echo esc_html($err); ?></p><?php endforeach; ?>
+      </div>
+      <?php endif; ?>
+
+      <!-- Form — AJAX handled by main.js; PHP nonce for PHP fallback -->
+      <form class="cabplus-contact-form contact-form" method="POST" novalidate>
         <?php wp_nonce_field( 'cabplus_contact_form', 'cabplus_contact_nonce' ); ?>
+
+        <!-- Honeypot -->
+        <div style="display:none;"><input type="text" name="website" value="" tabindex="-1" autocomplete="off"></div>
 
         <div class="form-row form-row--2">
           <div class="form-group">
             <label for="contact_name">Full name <span class="req">*</span></label>
-            <input type="text" id="contact_name" name="contact_name" value="<?php echo isset($_POST['contact_name']) ? esc_attr($_POST['contact_name']) : ''; ?>" placeholder="Your name" required>
+            <input type="text" id="contact_name" name="contact_name" placeholder="Your name" value="<?php echo isset($_POST['contact_name']) ? esc_attr(wp_unslash($_POST['contact_name'])) : ''; ?>" required>
           </div>
           <div class="form-group">
             <label for="contact_email">Email address <span class="req">*</span></label>
-            <input type="email" id="contact_email" name="contact_email" value="<?php echo isset($_POST['contact_email']) ? esc_attr($_POST['contact_email']) : ''; ?>" placeholder="you@company.com" required>
+            <input type="email" id="contact_email" name="contact_email" placeholder="you@company.com" value="<?php echo isset($_POST['contact_email']) ? esc_attr(wp_unslash($_POST['contact_email'])) : ''; ?>" required>
           </div>
         </div>
 
         <div class="form-row form-row--2">
           <div class="form-group">
             <label for="contact_phone">Phone (optional)</label>
-            <input type="tel" id="contact_phone" name="contact_phone" value="<?php echo isset($_POST['contact_phone']) ? esc_attr($_POST['contact_phone']) : ''; ?>" placeholder="+44 7700 000000">
+            <input type="tel" id="contact_phone" name="contact_phone" placeholder="+44 7700 000000" value="<?php echo isset($_POST['contact_phone']) ? esc_attr(wp_unslash($_POST['contact_phone'])) : ''; ?>">
           </div>
           <div class="form-group">
             <label for="contact_service">Service of interest</label>
             <select id="contact_service" name="contact_service">
               <option value="">&#8212; Select a service &#8212;</option>
               <?php foreach ($services as $svc): ?>
-              <option value="<?php echo esc_attr($svc['slug']); ?>" <?php selected( (isset($_POST['contact_service']) ? $_POST['contact_service'] : ''), $svc['slug'] ); ?>>
+              <option value="<?php echo esc_attr($svc['slug']); ?>" <?php selected( isset($_POST['contact_service']) ? $_POST['contact_service'] : '', $svc['slug'] ); ?>>
                 <?php echo esc_html(strip_tags($svc['title'])); ?>
               </option>
               <?php endforeach; ?>
@@ -94,17 +121,23 @@ $services = cabplus_get_services();
 
         <div class="form-group">
           <label for="contact_message">Message <span class="req">*</span></label>
-          <textarea id="contact_message" name="contact_message" rows="6" placeholder="Tell us about your business and what you need help with..." required><?php echo isset($_POST['contact_message']) ? esc_textarea($_POST['contact_message']) : ''; ?></textarea>
+          <textarea id="contact_message" name="contact_message" rows="6" placeholder="Tell us about your business and what you need help with..." required><?php echo isset($_POST['contact_message']) ? esc_textarea(wp_unslash($_POST['contact_message'])) : ''; ?></textarea>
         </div>
 
+        <div class="cabplus-form-error form-errors" style="display:none;"></div>
+
         <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;font-size:1rem;padding:14px 24px;">
-          Send message &#8594;
+          <span class="btn-text">Send message &#8594;</span>
+          <span class="btn-loading" style="display:none;">Sending&#8230;</span>
         </button>
-        <p style="font-size:0.78rem;color:var(--cream-muted);margin-top:12px;text-align:center;">We respond within 1 business day. Your data is handled in accordance with our privacy policy.</p>
+        <p style="font-size:0.76rem;color:var(--cream-muted);margin-top:12px;text-align:center;">
+          We respond within 1 business day. Your data is handled in accordance with our privacy policy.
+        </p>
       </form>
       <?php endif; ?>
     </div>
 
+    <!-- SIDEBAR -->
     <aside class="contact-info">
       <div class="contact-info-card">
         <h4>Direct contact</h4>
@@ -123,15 +156,15 @@ $services = cabplus_get_services();
         <ul class="contact-steps-list">
           <li>We read your message and respond within 1 business day</li>
           <li>We book a 30-minute discovery call (free)</li>
-          <li>We send a written summary of what we'd recommend and an indicative cost</li>
+          <li>We send a written summary of what we would recommend and an indicative cost</li>
           <li>You decide whether to proceed &#8212; no pressure</li>
         </ul>
       </div>
       <div class="contact-info-card">
-        <h4>Services</h4>
+        <h4>Our services</h4>
         <div class="foot-services">
           <?php foreach ($services as $svc): ?>
-          <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'])); ?>"><?php echo $svc['title']; ?></a>
+          <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'] . '/')); ?>"><?php echo esc_html(strip_tags($svc['title'])); ?></a>
           <?php endforeach; ?>
         </div>
       </div>

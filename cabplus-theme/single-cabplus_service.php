@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * CABPLUS — single-cabplus_service.php
  * Individual service page (used by WordPress CPT)
@@ -6,7 +6,23 @@
 get_header();
 
 $services = cabplus_get_services();
-$slug = get_post_field('post_name', get_the_ID());
+
+// 1. Check custom query var first
+$slug = get_query_var('cabplus_service_slug');
+
+// 2. If not found, check queried post name
+if ( ! $slug && get_the_ID() ) {
+    $slug = get_post_field('post_name', get_the_ID());
+}
+
+// 3. Fallback: Parse from URL path
+if ( ! $slug ) {
+    $req_path = parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+    $parts    = array_values( array_filter( explode('/', trim($req_path, '/')) ) );
+    if ( ! empty($parts) ) {
+        $slug = end($parts);
+    }
+}
 
 // Find current service data
 $current_svc = null;
@@ -18,20 +34,9 @@ foreach ($services as $i => $svc) {
         break;
     }
 }
-
-// If not CPT, try URL slug
 if (!$current_svc) {
-    $url_parts = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
-    $url_slug = end($url_parts);
-    foreach ($services as $i => $svc) {
-        if ($svc['slug'] === $url_slug) {
-            $current_svc = $svc;
-            $current_index = $i;
-            break;
-        }
-    }
+    $current_svc = $services[0];
 }
-if (!$current_svc) $current_svc = $services[0];
 ?>
 
 <!-- PAGE HERO -->
@@ -45,7 +50,7 @@ if (!$current_svc) $current_svc = $services[0];
     <div class="service-hero-text">
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="<?php echo esc_url(home_url('/')); ?>">Home</a> &#8250;
-        <a href="<?php echo esc_url(home_url('/services')); ?>">Services</a> &#8250;
+        <a href="<?php echo esc_url(home_url('/services/')); ?>">Services</a> &#8250;
         <span><?php echo $current_svc['title']; ?></span>
       </nav>
       <h1><?php echo $current_svc['title']; ?></h1>
@@ -59,9 +64,17 @@ if (!$current_svc) $current_svc = $services[0];
 <section class="service-content-section">
   <div class="wrap service-content-grid">
     <div class="service-main-content">
-      <?php if (have_posts()): while (have_posts()): the_post(); ?>
-        <div class="service-post-content"><?php the_content(); ?></div>
-      <?php endwhile; else: ?>
+      <?php 
+      $custom_content = '';
+      if ( have_posts() && get_post_type() === 'cabplus_service' ) {
+          while ( have_posts() ) { 
+              the_post(); 
+              $custom_content = get_the_content(); 
+          }
+      }
+      if ( ! empty($custom_content) ) : ?>
+        <div class="service-post-content"><?php echo apply_filters('the_content', $custom_content); ?></div>
+      <?php else: ?>
         <?php echo cabplus_service_default_content($current_svc['slug']); ?>
       <?php endif; ?>
     </div>
@@ -72,7 +85,7 @@ if (!$current_svc) $current_svc = $services[0];
         <ul class="sidebar-service-list">
           <?php foreach ($services as $i => $svc): ?>
           <li class="<?php echo ($svc['slug'] === $current_svc['slug']) ? 'active' : ''; ?>">
-            <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'])); ?>" style="--dot-color:<?php echo str_replace('linear-gradient(135deg,', '', explode(',', $svc['color'])[0]); ?>">
+            <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'] . '/')); ?>" style="--dot-color:<?php echo str_replace('linear-gradient(135deg,', '', explode(',', $svc['color'])[0]); ?>">
               <?php echo $svc['title']; ?>
             </a>
           </li>
@@ -102,7 +115,7 @@ if (!$current_svc) $current_svc = $services[0];
         if ($shown >= 3) break;
         $shown++;
       ?>
-      <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'])); ?>" class="svc-card svc-card-<?php echo ($i+1); ?>" style="text-decoration:none;">
+      <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'] . '/')); ?>" class="svc-card svc-card-<?php echo ($i+1); ?>" style="text-decoration:none;">
         <div class="svc-card-icon"><?php echo cabplus_service_svg_icon_small($svc['icon']); ?></div>
         <h3><?php echo $svc['title']; ?></h3>
         <p><?php echo $svc['short']; ?></p>

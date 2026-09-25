@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * CABPLUS — front-page.php (Homepage)
  */
@@ -85,7 +85,7 @@ $services = cabplus_get_services();
     </div>
     <div class="svc-cards">
       <?php foreach ($services as $i => $svc): ?>
-      <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'])); ?>" class="svc-card svc-card-<?php echo ($i+1); ?>" style="text-decoration:none;">
+      <a href="<?php echo esc_url(home_url('/services/' . $svc['slug'] . '/')); ?>" class="svc-card svc-card-<?php echo ($i+1); ?>" style="text-decoration:none;">
         <div class="svc-card-icon"><?php echo cabplus_service_svg_icon_small($svc['icon']); ?></div>
         <h3><?php echo $svc['title']; ?></h3>
         <p><?php echo $svc['short']; ?></p>

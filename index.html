@@ -8,6 +8,7 @@
     <title>CABPLUS AI Compliance — Business Ideas, Finance, Growth & Digital Solutions</title>
     <meta name="description"
         content="CABPLUS AI Compliance — Your trusted partner in Business Ideas, Finance & Investment, Business Registration, Growth, Social Media Marketing, Websites & Digital Solutions, GDPR, ISO 27001 and Cyber Essentials.">
+    <link rel="canonical" href="https://cabplus.uk/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -3028,26 +3029,27 @@
         };
 
         /* ── Router ── */
-        function goPage(id, pushHash) {
+        function goPage(id, pushHistory) {
             document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
             var pg = document.getElementById('page-' + id);
             if (pg) { pg.classList.add('active'); }
             window.scrollTo({ top: 0, behavior: 'smooth' });
             updateActiveNav(id);
-            if (pushHash !== false && history.pushState) {
-                history.pushState(null, '', '#' + id);
+            if (pushHistory !== false && history.pushState) {
+                var targetUrl = (id === 'home') ? '/' : '/' + id;
+                history.pushState({ page: id }, '', targetUrl);
             }
         }
 
-        function goService(slug, pushHash) {
+        function goService(slug, pushHistory) {
             renderServicePage(slug);
             document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
             var pg = document.getElementById('page-service');
             if (pg) { pg.classList.add('active'); }
             window.scrollTo({ top: 0, behavior: 'smooth' });
             updateActiveNav('services');
-            if (pushHash !== false && history.pushState) {
-                history.pushState(null, '', '#service-' + slug);
+            if (pushHistory !== false && history.pushState) {
+                history.pushState({ service: slug }, '', '/services/' + slug);
             }
         }
 
@@ -3065,17 +3067,41 @@
         }
 
         function handleRoute() {
-            var raw = (window.location.hash || '').replace(/^#/, '').trim();
-            if (!raw || raw === 'home') {
-                goPage('home', false);
-            } else if (raw.indexOf('service-') === 0) {
-                var slug = raw.replace('service-', '');
-                goService(slug, false);
-            } else if (document.getElementById('page-' + raw)) {
-                goPage(raw, false);
-            } else {
-                goPage('home', false);
+            var path = (window.location.pathname || '').replace(/^\/+|\/+$/g, '').toLowerCase();
+            var hash = (window.location.hash || '').replace(/^#/, '').trim().toLowerCase();
+
+            // 1. Path routing for individual service: /services/:slug or /service/:slug
+            var svcMatch = path.match(/^(?:services|service)\/([a-z0-9\-]+)$/);
+            if (svcMatch && svcMatch[1]) {
+                goService(svcMatch[1], false);
+                return;
             }
+
+            // 2. Path routing for all services overview: /services or /service
+            if (path === 'services' || path === 'service') {
+                goPage('services', false);
+                return;
+            }
+
+            // 3. Path routing for main pages: pricing, housing, about, contact
+            if (path && document.getElementById('page-' + path)) {
+                goPage(path, false);
+                return;
+            }
+
+            // 4. Hash fallback routing (support existing bookmark hashes)
+            if (hash.indexOf('service-') === 0) {
+                var hashSlug = hash.replace('service-', '');
+                goService(hashSlug, false);
+                return;
+            }
+            if (hash && document.getElementById('page-' + hash)) {
+                goPage(hash, false);
+                return;
+            }
+
+            // Default to Home
+            goPage('home', false);
         }
 
         window.addEventListener('popstate', handleRoute);

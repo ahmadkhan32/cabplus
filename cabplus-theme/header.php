@@ -54,21 +54,3 @@
   </nav>
 </header>
 
-<?php
-function cabplus_fallback_nav() {
-    $services = cabplus_get_services();
-    echo '<ul class="nav-list">';
-    echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
-    echo '<li class="menu-item-has-children"><a href="#">Services</a><ul class="sub-menu">';
-    foreach ($services as $svc) {
-        echo '<li><a href="' . esc_url(home_url('/services/' . $svc['slug'])) . '">' . $svc['title'] . '</a></li>';
-    }
-    echo '</ul></li>';
-    echo '<li><a href="' . esc_url(home_url('/#process')) . '">Process</a></li>';
-    echo '<li><a href="' . esc_url(home_url('/#housing')) . '">Housing</a></li>';
-    echo '<li><a href="' . esc_url(home_url('/#pricing')) . '">Pricing</a></li>';
-    echo '<li><a href="' . esc_url(home_url('/about')) . '">About</a></li>';
-    echo '<li><a href="' . esc_url(home_url('/contact')) . '">Contact</a></li>';
-    echo '</ul>';
-}
-?>
